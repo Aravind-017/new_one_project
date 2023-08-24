@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+void main(){
+  runApp(MaterialApp(home: SimpleAnimation(),));
+}
 class SimpleAnimation extends StatefulWidget {
   const SimpleAnimation({super.key});
 
@@ -7,9 +10,17 @@ class SimpleAnimation extends StatefulWidget {
   State<SimpleAnimation> createState() => _SimpleAnimationState();
 }
 
-class _SimpleAnimationState extends State<SimpleAnimation> {
+class _SimpleAnimationState extends State<SimpleAnimation> with SingleTickerProviderStateMixin {
   Animation<double>? animation;
   AnimationController? animationController;
+
+  @override
+  void initState(){
+    animationController=AnimationController(vsync: this,duration: Duration(seconds: 1));
+    animation=Tween<double>(begin: 12.0,end: 100.0).animate(animationController!)..addListener(() {
+      setState(() { });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +31,12 @@ class _SimpleAnimationState extends State<SimpleAnimation> {
             margin: EdgeInsets.all(20),
             child: Text("Hello All",
             style: TextStyle(fontSize: animation?.value),),),
-          ElevatedButton(onPressed: ()=>zoomin()dwef, child: const Text('increase text size'))
+          ElevatedButton(onPressed: ()=>zoomin(), child: const Text('increase text size'))
         ],
       ),
     );
+  }
+  void zoomin(){
+    animationController!.forward();
   }
 }
